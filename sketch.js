@@ -20,7 +20,7 @@ function preload() {
       circle = loadImage("circle.png");
     }
 var garbArray = [];
-var timeSpeed = 1000;
+var timeSpeed = 100;
 var worldClock = {
     day : 0,
     hou : 0,
@@ -49,13 +49,13 @@ function setup() {//=========Start SETUP========================================
 
     setInterval(function(){
       worldClock.sec += 1;
-      blockHeight += 0.5;
+      blockHeight += 1.5;
       if(worldClock.sec === 60){worldClock.sec = 0;worldClock.min += 1;}
       if(worldClock.min === 60){worldClock.min = 0;worldClock.hou += 1;}
       if(worldClock.hou === 60){worldClock.hou = 0;worldClock.day += 1;}
   // garbage Production
-      if(worldClock.sec%2 === 0){lastPos.x = mario.pos.x;lastPos.y = mario.pos.y;}
-      if(worldClock.sec%2===0+0.5){garbArray.push(new Garbage(lastPos.x,lastPos.y));}
+      if(worldClock.sec%3 === 0){lastPos.x = mario.pos.x;lastPos.y = mario.pos.y;}
+      if(worldClock.sec%8===0){garbArray.push(new Garbage(lastPos.x,lastPos.y));}
     },timeSpeed);
 // Setting up Box constructor
   function Box(x,y){
@@ -95,7 +95,7 @@ function draw(){//=========Start DRAW==========================================
 // Question Collision-------------------------------------------------
   mario.collisionPointsSetup(); // establish the hit box through four points of mario
   mario.collide(); // check if there is a collision and correct the posiiton
-  mario.amIdead();
+
 // RENDER MARIO-----------------------------------------------------
   mario.display();
   blockRender();
@@ -123,6 +123,7 @@ function draw(){//=========Start DRAW==========================================
     showText("Better clean up your waste", -130, 190, 24, "white");
     gameover = true;
   }
+  mario.amIdead();
 } // Ende draw();==============================================================
 //=============================================================================
 
@@ -227,14 +228,16 @@ function amIdead(){
   if(mario.pos.y > worldHeight-blockHeight){
     textSize(80);
     fill(0,0,0)
-    text("Game Over", mario.pos.x-250, mario.pos.y);
+    text("Game Over:", mario.pos.x-250, mario.pos.y);
+    showText("One cannot change all the world,", mario.pos.x-250, mario.pos.y+50,20,"black");
+    showText("all together can change the only one we have.", mario.pos.x-250, mario.pos.y+100,20,"black");
     gameover = true;
   }
 }
 function renderGarbage(){
   for(var i = 0 ; i<garbArray.length ; i++){
       garbArray[i].display();
-      if(p5.Vector.dist(mario.pos, garbArray[i].pos)<10){garbArray.splice(i,1);blockHeight-=10}
+      if(p5.Vector.dist(mario.pos, garbArray[i].pos)<10){garbArray.splice(i,1);blockHeight-=2}
   }
 }
 function marioDisplay(){
