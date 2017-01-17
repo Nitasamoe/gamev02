@@ -1,11 +1,28 @@
-worldSetup = [];
-var sizeBox     = 35,
+var worldSetup = [],
+  sizeBox     = 35,
     marioInput  = {
-        speedValue  : 1,
-        jumpValue   : 32,
-        sizeValue   : 30
+      speedValue  : 1,
+      jumpValue   : 32,
+      sizeValue   : 30
+    },
+    mario,
+    garbArray = [],
+    timeSpeed = 100,
+    worldClock = {
+      day : 0,
+      hou : 0,
+      min : 0,
+      sec :0
+    },
+    startVar = false,
+    gameover = false,
+    blockHeight = 0,
+    worldHeight = 700,
+    worldWidth = 10500,
+    lastPos={
+      x:0,
+      y:0
     }
-var mario;
 function preload() {
       imgBlock = loadImage("block.png");
       imgBlock2 = loadImage("block2.png");
@@ -19,23 +36,6 @@ function preload() {
       start = loadImage("start.jpg");
       circle = loadImage("circle.png");
     }
-var garbArray = [];
-var timeSpeed = 100;
-var worldClock = {
-    day : 0,
-    hou : 0,
-    min : 0,
-    sec :0
-}
-var startVar = false;
-var gameover = false;
-var blockHeight = 0;
-var worldHeight = 700;
-var worldWidth = 10500;
-var lastPos={
-  x:0,
-  y:0
-}
 //============================END OF INPUT=======================================
 //===============================================================================
 function setup() {//=========Start SETUP=========================================
@@ -44,9 +44,7 @@ function setup() {//=========Start SETUP========================================
   convertToArray(sizeBox,worldHeight,worldWidth);
   createCanvas(700, 700);
   frameRate(60);
-  console.log("start");
 // Setup Game Clock
-
     setInterval(function(){
       worldClock.sec += 1;
       blockHeight += 1.5;
@@ -57,13 +55,6 @@ function setup() {//=========Start SETUP========================================
       if(worldClock.sec%3 === 0){lastPos.x = mario.pos.x;lastPos.y = mario.pos.y;}
       if(worldClock.sec%8===0){garbArray.push(new Garbage(lastPos.x,lastPos.y));}
     },timeSpeed);
-// Setting up Box constructor
-  function Box(x,y){
-    this.top = y*sizeBox;
-    this.bottom = y*sizeBox+sizeBox;
-    this.right = x*sizeBox+sizeBox;
-    this.left = x*sizeBox;
-  }
 // Setting up array for boxes
   boxArr = [];
 // creating the boxes and filling them into the BoxArr
@@ -120,7 +111,7 @@ function draw(){//=========Start DRAW==========================================
   if(startVar === false){
     rect(0-332,0,700,700);
     showText("Press Enter to Continue", -120, 450, 24, "white");
-    showText("Better clean up your waste", -130, 190, 24, "white");
+    showText("Pick your waste in order to survive", -160, 190, 24, "white");
     gameover = true;
   }
   mario.amIdead();
@@ -191,7 +182,7 @@ function establishAntiForce(boxes){
     }
   }
 }
-// gliding On or OFF
+// gliding ON or OFF
 function keyReleased(){
   //mario.acc.mult(0);
 }
@@ -229,8 +220,8 @@ function amIdead(){
     textSize(80);
     fill(0,0,0)
     text("Game Over:", mario.pos.x-250, mario.pos.y);
-    showText("One cannot change all the world,", mario.pos.x-250, mario.pos.y+50,20,"black");
-    showText("all together can change the only one we have.", mario.pos.x-250, mario.pos.y+100,20,"black");
+    showText("One cannot change all the world,", mario.pos.x-250, mario.pos.y+50,20,"white");
+    showText("all together can change the only one we have.", mario.pos.x-250, mario.pos.y+100,20,"white");
     gameover = true;
   }
 }
@@ -264,6 +255,9 @@ function convertToArray(boxSize,height,width){
     fill(color);
     text(cont, x, y);
   }
+
+//======================================================================================================
+// ============= CONTRUCTORS ===========================================================================
 // Establish constructor for mario
     function Mario(){
       this.pos    = createVector(sizeBox/2,sizeBox/2);
@@ -291,4 +285,11 @@ function convertToArray(boxSize,height,width){
       // method to establish the four Points of hitBox
       this.collisionPointsSetup = function(){this.colPoints = createCollisionPoints(this.pos,this.size);};
       this.exist = true;
+    }
+// Setting up Box constructor
+    function Box(x,y){
+      this.top = y*sizeBox;
+      this.bottom = y*sizeBox+sizeBox;
+      this.right = x*sizeBox+sizeBox;
+      this.left = x*sizeBox;
     }
