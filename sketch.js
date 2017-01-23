@@ -1,13 +1,36 @@
+var gameInput = {
+  time : 1000,
+  jumpHigh : 32,
+  worldHeight : 700,
+  worldWidth : 10500,
+  garbageRaiseSpeed : 2,
+  garbageLowerValue : 5,
+  garbageDropTime : 2,
+  garbageRaiseSpeedChina : 30,
+  garbageRaiseSpeedItaly : 15,
+  garbageRaiseSpeedGermany : 1
+}
+//====================================================================
+//====================================================================
+//======================Code Begins here==============================
+//======================No Changing from==============================
+//======================Here On On====================================
+//====================================================================
+//====================================================================
+//====================================================================
+//====================================================================
+//====================================================================
+var highlight = 0;
 var worldSetup = [],
   sizeBox     = 35,
     marioInput  = {
       speedValue  : 1,
-      jumpValue   : 32,
+      jumpValue   : gameInput.jumpHigh,
       sizeValue   : 30
     },
     mario,
     garbArray = [],
-    timeSpeed = 100,
+    timeSpeed = gameInput.time,
     worldClock = {
       day : 0,
       hou : 0,
@@ -17,9 +40,9 @@ var worldSetup = [],
     startVar = false,
     gameover = false,
     blockHeight = 0,
-    worldHeight = 700,
-    worldWidth = 10500,
-    lastPos={
+    worldHeight = gameInput.worldHeight,
+    worldWidth = gameInput.worldWidth,
+    lastPos = {
       x:0,
       y:0
     }
@@ -35,41 +58,48 @@ function preload() {
       garbage2 = loadImage("plasticWaste.jpg");
       start = loadImage("start.jpg");
       circle = loadImage("circle.png");
+      wasteIcon = loadImage("bottle.png");
     }
 //============================END OF INPUT=======================================
 //===============================================================================
 function setup() {//=========Start SETUP=========================================
+// Sets up the image and runs the function to create the world
   createCanvas(worldWidth, 700);
   image(img, 0, 0, worldWidth, worldHeight );
   convertToArray(sizeBox,worldHeight,worldWidth);
+// Sets up the final Canvas for the Game
   createCanvas(700, 700);
   frameRate(60);
 // Setup Game Clock
+  worldClock();
+  function worldClock(){
+    var clock2 = 0;
+    var clock3 = 0;
     setInterval(function(){
       worldClock.sec += 1;
-      blockHeight += 1.5;
+      clock2 += 0.5;
+       if(clock2 === gameInput.garbageDropTime-0.5){lastPos.x = mario.pos.x;lastPos.y = mario.pos.y;}
+      clock3 += 0.5;
+       if(clock3 === gameInput.garbageDropTime){garbArray.push(new Garbage(lastPos.x,lastPos.y)); clock3 = 0; clock2 = 0;}
+      blockHeight += gameInput.garbageRaiseSpeed;
       if(worldClock.sec === 60){worldClock.sec = 0;worldClock.min += 1;}
       if(worldClock.min === 60){worldClock.min = 0;worldClock.hou += 1;}
       if(worldClock.hou === 60){worldClock.hou = 0;worldClock.day += 1;}
-  // garbage Production
-      if(worldClock.sec%3 === 0){lastPos.x = mario.pos.x;lastPos.y = mario.pos.y;}
-      if(worldClock.sec%8===0){garbArray.push(new Garbage(lastPos.x,lastPos.y));}
     },timeSpeed);
+  }
 // Setting up array for boxes
   boxArr = [];
 // creating the boxes and filling them into the BoxArr
-  for(var x = 0; x < worldSetup[0].length ; x++){
-    for(var y = 0; y < worldSetup.length ; y++){
-      if(worldSetup[y][x]===false){
-        (function(){ var box = new Box(x,y); boxArr.push(box);  })();
-      }
-    }
-  }
-  mario = new Mario() // create Mario from the constructor
+fillArrayWithBoxes();
+// create Mario from the constructor
+  mario = new Mario()
 }//=========END SETUP==========================================================
 //=============================================================================
-function draw(){//=========Start DRAW==========================================
 
+
+//=============================================================================
+//=============================================================================
+function draw(){//=========Start DRAW==========================================
 // Setup FORCES----------------------------------------------------------
   gravity = createVector(0,1);
 //WORLD BUILDING---------------------------------------------------------
@@ -86,39 +116,18 @@ function draw(){//=========Start DRAW==========================================
 // Question Collision-------------------------------------------------
   mario.collisionPointsSetup(); // establish the hit box through four points of mario
   mario.collide(); // check if there is a collision and correct the posiiton
-
 // RENDER MARIO-----------------------------------------------------
   mario.display();
   blockRender();
-//change acceleration based on the pressed key
-  if(keyIsPressed===true && gameover === false){
-    if(keyCode === RIGHT_ARROW){
-      //console.log("right");
-      mario.acc.add(createVector(marioInput.speedValue,0));
-      mario.looks = false;
-    }
-    if(keyCode === LEFT_ARROW){
-      //console.log("left");
-      mario.acc.add(createVector(-marioInput.speedValue,0));
-      mario.looks = true;
-    }
-  }
-  showText(worldClock.hou+":"+worldClock.min+":"+worldClock.sec, mario.pos.x-300, 50, 20, "black");
-  showText(Math.floor(blockHeight) + " tons Garbage", mario.pos.x+200, 680, 20, "black");
-  for(var i = 0; i < 8 ; i++){
-    showText(i*2+"m", mario.pos.x-300, 700-i*35, 15, "black");
-  }
-  if(startVar === false){
-    rect(0-332,0,700,700);
-    showText("Press Enter to Continue", -120, 450, 24, "white");
-    showText("Pick your waste in order to survive", -160, 190, 24, "white");
-    gameover = true;
-  }
+//change acceleration based on the pressed key. goes left or right.
+  movement();
+// Turn on the HUD to see Data of Game
+  turnOnHUD();
+  startScreen();
+// Check if the box has reached mario, if yes GAMEOVER
   mario.amIdead();
 } // Ende draw();==============================================================
 //=============================================================================
-
-
 
 
 
@@ -191,11 +200,36 @@ function keyPressed(){
       if(keyCode === UP_ARROW && mario.inAir === false && gameover === false){
         mario.acc.add(createVector(0,-marioInput.jumpValue));
         mario.inAir = true;
-      }
+        }
+        if(keyCode === DOWN_ARROW){
+          highlight +=1;
+          if(highlight === 3){
+            highlight = 0;
+            }
+        }
+        if(keyCode === UP_ARROW){
+          highlight -=1;
+          if(highlight === -1){
+            highlight = 2;
+            }
+        }
   // control startScreen
       if(keyCode === ENTER){
-        gameover = false;
-        startVar = true;
+        if(highlight === 0){
+          gameover = false;
+          startVar = true;
+          gameInput.garbageRaiseSpeed = gameInput.garbageRaiseSpeedChina;
+        }
+        if(highlight === 1){
+          gameover = false;
+          startVar = true;
+          gameInput.garbageRaiseSpeed = gameInput.garbageRaiseSpeedItaly;
+        }
+        if(highlight === 2){
+          gameover = false;
+          startVar = true;
+          gameInput.garbageRaiseSpeed = gameInput.garbageRaiseSpeedGermany;
+        }
       }
 }
 function worldBuilding(){
@@ -228,7 +262,7 @@ function amIdead(){
 function renderGarbage(){
   for(var i = 0 ; i<garbArray.length ; i++){
       garbArray[i].display();
-      if(p5.Vector.dist(mario.pos, garbArray[i].pos)<10){garbArray.splice(i,1);blockHeight-=2}
+      if(p5.Vector.dist(mario.pos, garbArray[i].pos)<10){garbArray.splice(i,1);blockHeight-=gameInput.garbageLowerValue}
   }
 }
 function marioDisplay(){
@@ -255,6 +289,57 @@ function convertToArray(boxSize,height,width){
     fill(color);
     text(cont, x, y);
   }
+  function fillArrayWithBoxes(){
+    for(var x = 0; x < worldSetup[0].length ; x++){
+      for(var y = 0; y < worldSetup.length ; y++){
+        if(worldSetup[y][x]===false){
+          (function(){ var box = new Box(x,y); boxArr.push(box);  })();
+        }
+      }
+    }
+  }
+  function movement(){
+    if(keyIsPressed===true && gameover === false){
+      if(keyCode === RIGHT_ARROW){
+        //console.log("right");
+        mario.acc.add(createVector(marioInput.speedValue,0));
+        mario.looks = false;
+      }
+      if(keyCode === LEFT_ARROW){
+        //console.log("left");
+        mario.acc.add(createVector(-marioInput.speedValue,0));
+        mario.looks = true;
+      }
+    }
+  }
+  function turnOnHUD(){
+    showText(worldClock.hou+":"+worldClock.min+":"+worldClock.sec, mario.pos.x-300, 50, 20, "white");
+    showText(Math.floor(blockHeight) + " tons Garbage", mario.pos.x+200, 680, 20, "white");
+    for(var i = 0; i < 8 ; i++){
+      showText(i*2+"kg", mario.pos.x-300, 700-i*35, 15, "white");
+    }
+  }
+  function startScreen(){
+    if(startVar === false){
+      rect(0-332,0,700,700);
+      showText("Press Enter to Continue", -120, 450, 24, "black");
+        if(highlight === 0){
+          showText("China", -160, 190, 24, "red");
+        } else { showText("China", -160, 190, 24, "black"); }
+
+        if(highlight === 1){
+          showText("Italy", -160, 220, 24, "red");
+        } else { showText("Italy", -160, 220, 24, "black"); }
+
+        if(highlight === 2){
+          showText("Austria", -160, 250, 24, "red");
+        } else { showText("Austria", -160, 250, 24, "black"); }
+      gameover = true;
+    }
+  }
+
+
+
 
 //======================================================================================================
 // ============= CONTRUCTORS ===========================================================================
@@ -279,7 +364,8 @@ function convertToArray(boxSize,height,width){
       this.size   = 10;
       this.vel    = createVector(0,0);
       this.acc    = createVector(0,0);
-      this.display= function(){ ellipse(this.pos.x, this.pos.y, this.size) };
+      this.display= function(){ //ellipse(this.pos.x, this.pos.y, this.size);
+                                image(wasteIcon,this.pos.x, this.pos.y, 30, 22)};
       this.collide= function(){var colP = this.colPoints; collision(boxArr, colP)};
       this.colPoints; // arr of the four points of the hit box
       // method to establish the four Points of hitBox
