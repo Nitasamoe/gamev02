@@ -5,9 +5,9 @@ var gameInput = {
   worldWidth : 10500,
   garbageRaiseSpeed : 2,
   garbageLowerValue : 5,
-  garbageDropTime : 2,
-  garbageRaiseSpeedChina : 30,
-  garbageRaiseSpeedItaly : 15,
+  garbageDropTime : 1,
+  garbageRaiseSpeedChina : 10,
+  garbageRaiseSpeedItaly : 5,
   garbageRaiseSpeedGermany : 1
 }
 //====================================================================
@@ -31,7 +31,7 @@ var worldSetup = [],
     mario,
     garbArray = [],
     timeSpeed = gameInput.time,
-    worldClock = {
+    worldClockData = {
       day : 0,
       hou : 0,
       min : 0,
@@ -46,6 +46,9 @@ var worldSetup = [],
       x:0,
       y:0
     }
+var clock = {
+
+}
 function preload() {
       imgBlock = loadImage("block.png");
       imgBlock2 = loadImage("block2.png");
@@ -54,6 +57,10 @@ function preload() {
       ghostRight = loadImage("ghostRight.png");
       img = loadImage("bild.jpg");
       sky = loadImage("sky.jpg");
+      back1 = loadImage("back1.png");
+      back2 = loadImage("back2.png");
+      back3 = loadImage("back3.png");
+      back4 = loadImage("back4.png");
       garbage = loadImage("water.jpg");
       garbage2 = loadImage("plasticWaste.jpg");
       start = loadImage("start.jpg");
@@ -72,19 +79,25 @@ function setup() {//=========Start SETUP========================================
   frameRate(60);
 // Setup Game Clock
   worldClock();
+
   function worldClock(){
     var clock2 = 0;
+
     var clock3 = 0;
     setInterval(function(){
-      worldClock.sec += 1;
+      console.log(worldClockData)
+      console.log(worldClockData.hou)
+      console.log(worldClockData.min)
+      console.log(worldClockData.sec)
+      worldClockData.sec += 1;
       clock2 += 0.5;
        if(clock2 === gameInput.garbageDropTime-0.5){lastPos.x = mario.pos.x;lastPos.y = mario.pos.y;}
       clock3 += 0.5;
        if(clock3 === gameInput.garbageDropTime){garbArray.push(new Garbage(lastPos.x,lastPos.y)); clock3 = 0; clock2 = 0;}
       blockHeight += gameInput.garbageRaiseSpeed;
-      if(worldClock.sec === 60){worldClock.sec = 0;worldClock.min += 1;}
-      if(worldClock.min === 60){worldClock.min = 0;worldClock.hou += 1;}
-      if(worldClock.hou === 60){worldClock.hou = 0;worldClock.day += 1;}
+      if(worldClockData.sec === 60){worldClockData.sec = 0;worldClockData.min += 1;}
+      if(worldClockData.min === 60){worldClockData.min = 0;worldClockData.hou += 1;}
+      if(worldClockData.hou === 60){worldClockData.hou = 0;worldClockData.day += 1;}
     },timeSpeed);
   }
 // Setting up array for boxes
@@ -234,7 +247,12 @@ function keyPressed(){
 }
 function worldBuilding(){
 // build background image
-  image(sky,0-mario.pos.x,0, worldWidth, worldHeight);
+  image(back4,0-mario.pos.x,0, worldWidth+500, worldHeight);
+
+  image(back3,0-mario.pos.x*1.07,0, worldWidth+500, worldHeight);
+  image(back2,0-mario.pos.x*1.05,0, worldWidth+500, worldHeight);
+  image(back1,0-mario.pos.x,0, worldWidth, worldHeight);
+
 // translate the world view
   translate(-mario.pos.x+ width/2,0);
 // Setup black squares ------------------------------------------
@@ -313,7 +331,7 @@ function convertToArray(boxSize,height,width){
     }
   }
   function turnOnHUD(){
-    showText(worldClock.hou+":"+worldClock.min+":"+worldClock.sec, mario.pos.x-300, 50, 20, "white");
+    showText(worldClockData.hou+":"+worldClockData.min+":"+worldClockData.sec, mario.pos.x-300, 50, 20, "white");
     showText(Math.floor(blockHeight) + " tons Garbage", mario.pos.x+200, 680, 20, "white");
     for(var i = 0; i < 8 ; i++){
       showText(i*2+"kg", mario.pos.x-300, 700-i*35, 15, "white");
@@ -365,7 +383,7 @@ function convertToArray(boxSize,height,width){
       this.vel    = createVector(0,0);
       this.acc    = createVector(0,0);
       this.display= function(){ //ellipse(this.pos.x, this.pos.y, this.size);
-                                image(wasteIcon,this.pos.x, this.pos.y, 30, 22)};
+                                image(wasteIcon,this.pos.x, this.pos.y, 20, 20)};
       this.collide= function(){var colP = this.colPoints; collision(boxArr, colP)};
       this.colPoints; // arr of the four points of the hit box
       // method to establish the four Points of hitBox
