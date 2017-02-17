@@ -86,10 +86,10 @@ function setup() {//=========Start SETUP========================================
 
     var clock3 = 0;
     setInterval(function(){
-      console.log(worldClockData)
-      console.log(worldClockData.hou)
-      console.log(worldClockData.min)
-      console.log(worldClockData.sec)
+      // console.log(worldClockData)
+      // console.log(worldClockData.hou)
+      // console.log(worldClockData.min)
+      // console.log(worldClockData.sec)
       worldClockData.sec += 1;
       clock2 += 0.5;
        if(clock2 === gameInput.garbageDropTime-0.5){lastPos.x = mario.pos.x;lastPos.y = mario.pos.y;}
@@ -269,11 +269,13 @@ function worldBuilding(){
 }
 function amIdead(){
   if(mario.pos.y > worldHeight-blockHeight){
-    textSize(80);
-    fill(0,0,0)
-    text("Game Over:", mario.pos.x-250, mario.pos.y);
-    showText("One cannot change all the world,", mario.pos.x-250, mario.pos.y+50,20,"white");
-    showText("all together can change the only one we have.", mario.pos.x-250, mario.pos.y+100,20,"white");
+    fill("black");
+    rect(mario.pos.x-350,0,800,800);
+    // textSize(80);
+    // fill("yellow");
+    showText("Game Over",mario.pos.x-250, mario.pos.y,80,"yellow" );
+    showText("One cannot change all the world,", mario.pos.x-250, mario.pos.y+50,20,"yellow");
+    showText("all together can change the only one we have.", mario.pos.x-250, mario.pos.y+100,20,"yellow");
     gameover = true;
   }
 }
@@ -305,6 +307,7 @@ function convertToArray(boxSize,height,width){
   function showText(cont, x, y , size, color){
     textSize(size);
     fill(color);
+    textFont("VT323");
     text(cont, x, y);
   }
   function fillArrayWithBoxes(){
@@ -339,19 +342,20 @@ function convertToArray(boxSize,height,width){
   }
   function startScreen(){
     if(startVar === false){
+      fill("black");
       rect(0-332,0,700,700);
-      showText("Press Enter to Continue", -120, 450, 24, "black");
+      showText("Press Enter to Continue", -120, 450, 24, "white");
         if(highlight === 0){
-          showText("China", -160, 190, 24, "red");
-        } else { showText("China", -160, 190, 24, "black"); }
+          showText("China", -160, 190, 24, "yellow");
+        } else { showText("China", -160, 190, 24, "white"); }
 
         if(highlight === 1){
-          showText("Italy", -160, 220, 24, "red");
-        } else { showText("Italy", -160, 220, 24, "black"); }
+          showText("Italy", -160, 220, 24, "yellow");
+        } else { showText("Italy", -160, 220, 24, "white"); }
 
         if(highlight === 2){
-          showText("Austria", -160, 250, 24, "red");
-        } else { showText("Austria", -160, 250, 24, "black"); }
+          showText("Austria", -160, 250, 24, "yellow");
+        } else { showText("Austria", -160, 250, 24, "white"); }
       gameover = true;
     }
   }
