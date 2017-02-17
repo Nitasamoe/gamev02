@@ -8,7 +8,7 @@ var gameInput = {
   garbageDropTime : 1,
   garbageRaiseSpeedChina : 10,
   garbageRaiseSpeedItaly : 5,
-  garbageRaiseSpeedGermany : 1
+  garbageRaiseSpeedGermany : 9
 }
 //====================================================================
 //====================================================================
@@ -119,6 +119,9 @@ function draw(){//=========Start DRAW==========================================
 //WORLD BUILDING---------------------------------------------------------
    worldBuilding();
    blockRender();
+
+   instruction();
+
    renderGarbage();
 //MARIO BUILDING-----------------------------------------------
   mario.vel.mult(0); // throw velocity bck to zero
@@ -142,13 +145,6 @@ function draw(){//=========Start DRAW==========================================
   mario.amIdead();
 } // Ende draw();==============================================================
 //=============================================================================
-
-
-
-
-
-
-
 function blockRender(){
   // RENDER BLOCK THAT RISES=====================================================
   fill(180,20,20,100);
@@ -273,9 +269,9 @@ function amIdead(){
     rect(mario.pos.x-350,0,800,800);
     // textSize(80);
     // fill("yellow");
-    showText("Game Over",mario.pos.x-250, mario.pos.y,80,"yellow" );
-    showText("One cannot change all the world,", mario.pos.x-250, mario.pos.y+50,20,"yellow");
-    showText("all together can change the only one we have.", mario.pos.x-250, mario.pos.y+100,20,"yellow");
+    showText("Game Over",mario.pos.x-160, 300, 80,"yellow" );
+    showText("One cannot change all the world,", mario.pos.x-140, 450, 20,"yellow");
+    showText("all together can change the only one we have.", mario.pos.x-190, 470, 20,"yellow");
     gameover = true;
   }
 }
@@ -334,40 +330,61 @@ function convertToArray(boxSize,height,width){
     }
   }
   function turnOnHUD(){
-    showText(worldClockData.hou+":"+worldClockData.min+":"+worldClockData.sec, mario.pos.x-300, 50, 20, "white");
-    showText(Math.floor(blockHeight) + " tons Garbage", mario.pos.x+200, 680, 20, "white");
-    for(var i = 0; i < 8 ; i++){
-      showText(i*2+"kg", mario.pos.x-300, 700-i*35, 15, "white");
-    }
+    if(mario.pos.x > 300){
+        showText(worldClockData.hou+":"+worldClockData.min+":"+worldClockData.sec, mario.pos.x-300, 50, 24, "white");
+        showText(Math.floor(blockHeight) + " tons Garbage", mario.pos.x+200, 680, 24, "white");
+        for(var i = 0; i < 8 ; i++){
+          showText(i*2+"kg", mario.pos.x-300, 700-i*35, 18, "white");
+        }
+      }
   }
   function startScreen(){
     if(startVar === false){
       fill("black");
-      rect(0-332,0,700,700);
-      showText("Press Enter to Continue", -120, 450, 24, "white");
+      rect(0-340,0,800,800);
+      showText("Use arrows to select your difficulty", -120, 250, 24, "white");
+      showText("Press Enter to Continue", 0, 600, 24, "white");
         if(highlight === 0){
-          showText("China", -160, 190, 24, "yellow");
-        } else { showText("China", -160, 190, 24, "white"); }
+          showText("China - produces 6ton/min", -70, 290, 24, "yellow");
+        } else { showText("China", -70, 290, 24, "white"); }
 
         if(highlight === 1){
-          showText("Italy", -160, 220, 24, "yellow");
-        } else { showText("Italy", -160, 220, 24, "white"); }
+          showText("Italy - produces 6ton/min", -70, 320, 24, "yellow");
+        } else { showText("Italy", -70, 320, 24, "white"); }
 
         if(highlight === 2){
-          showText("Austria", -160, 250, 24, "yellow");
-        } else { showText("Austria", -160, 250, 24, "white"); }
+          showText("Germany - produces 6ton/min", -70, 350, 24, "yellow");
+        } else { showText("Germany", -70, 350, 24, "white"); }
       gameover = true;
     }
   }
+  function instruction(){
+    var h = 100;
+    var color = "yellow";
+    fill(20,20,20);
+    rect(0-350,0,350,700);
+    showText("use the arrows to move", -270, h+25, 24, color);
+    showText("and collect the bottles", -270, h+50, 24, color);
+    showText("in order to prevent", -270, h+75, 24, color);
+    showText("the garbage to kill you", -270, h+100, 24, color);
+    showText("Ah...", -270, h+480, 24, color);
+    showText("in case you are wondering...", -270, h+505, 24, color);
+    showText("this is the garbage", -270, h+530, 24, color);
 
 
+    if(mario.pos.x> 500 && mario.pos.x < 800){
+      showText("did you forget something?", mario.pos.x-270, 330, 24, color);
+    }
+    if(mario.pos.x> 800 && mario.pos.x < 1200){
+      showText("without picking trash up you will never make it", mario.pos.x-270, 330, 24, color);
+    }
 
-
+  }
 //======================================================================================================
 // ============= CONTRUCTORS ===========================================================================
 // Establish constructor for mario
     function Mario(){
-      this.pos    = createVector(sizeBox/2,sizeBox/2);
+      this.pos    = createVector(sizeBox/2+50,sizeBox/2);
       this.size   = marioInput.sizeValue;
       this.inAir  = false;
       this.vel    = createVector(0,0);
@@ -387,7 +404,7 @@ function convertToArray(boxSize,height,width){
       this.vel    = createVector(0,0);
       this.acc    = createVector(0,0);
       this.display= function(){ //ellipse(this.pos.x, this.pos.y, this.size);
-                                image(wasteIcon,this.pos.x, this.pos.y, 20, 20)};
+                                image(wasteIcon,this.pos.x, this.pos.y, 15, 20)};
       this.collide= function(){var colP = this.colPoints; collision(boxArr, colP)};
       this.colPoints; // arr of the four points of the hit box
       // method to establish the four Points of hitBox
