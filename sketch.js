@@ -55,6 +55,7 @@ function preload() {
       ghostFront = loadImage("ghostFront.png");
       ghostLeft = loadImage("ghostLeft.png");
       ghostRight = loadImage("ghostRight.png");
+      mullberg = loadImage("Mullberg.png");
       img = loadImage("bild.jpg");
       sky = loadImage("sky.jpg");
       back1 = loadImage("back1.png");
@@ -62,7 +63,7 @@ function preload() {
       back3 = loadImage("back3.png");
       back4 = loadImage("back4.png");
       garbage = loadImage("water.jpg");
-      garbage2 = loadImage("plasticWaste.jpg");
+      garbage2 = loadImage("Mullberg.png");
       start = loadImage("start.jpg");
       circle = loadImage("circle.png");
       wasteIcon = loadImage("bottle.png");
@@ -248,7 +249,6 @@ function keyPressed(){
 function worldBuilding(){
 // build background image
   image(back4,0-mario.pos.x,0, worldWidth+500, worldHeight);
-
   image(back3,0-mario.pos.x*1.07,0, worldWidth+500, worldHeight);
   image(back2,0-mario.pos.x*1.05,0, worldWidth+500, worldHeight);
   image(back1,0-mario.pos.x,0, worldWidth, worldHeight);
