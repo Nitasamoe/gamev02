@@ -6,7 +6,7 @@ var gameInput = {
   garbageRaiseSpeed : 2,
   garbageLowerValue : 5,
   garbageDropTime : 1,
-  garbageRaiseSpeedChina : 10,
+  garbageRaiseSpeedChina : 100,
   garbageRaiseSpeedItaly : 5,
   garbageRaiseSpeedGermany : 9
 }
@@ -20,6 +20,10 @@ var gameInput = {
 //====================================================================
 //====================================================================
 //====================================================================
+var bubblesStates = {
+  first : true,
+  second : false
+}
 var highlight = 0;
 var worldSetup = [],
   sizeBox     = 35,
@@ -67,6 +71,8 @@ function preload() {
       start = loadImage("start.jpg");
       circle = loadImage("circle.png");
       wasteIcon = loadImage("bottle.png");
+      speech = loadImage("speech.png");
+      speech2 = loadImage("speech2.png");
     }
 //============================END OF INPUT=======================================
 //===============================================================================
@@ -270,8 +276,8 @@ function amIdead(){
     // textSize(80);
     // fill("yellow");
     showText("Game Over",mario.pos.x-160, 300, 80,"yellow" );
-    showText("One cannot change all the world,", mario.pos.x-140, 450, 20,"yellow");
-    showText("all together can change the only one we have.", mario.pos.x-190, 470, 20,"yellow");
+    showText("One cannot change all the world,", mario.pos.x-200, 450, 30,"yellow");
+    showText("all together can change the only one we have.", mario.pos.x-250, 480, 30,"yellow");
     gameover = true;
   }
 }
@@ -332,33 +338,38 @@ function convertToArray(boxSize,height,width){
   function turnOnHUD(){
     if(mario.pos.x > 300){
         showText(worldClockData.hou+":"+worldClockData.min+":"+worldClockData.sec, mario.pos.x-300, 50, 24, "white");
-        showText(Math.floor(blockHeight) + " tons Garbage", mario.pos.x+200, 680, 24, "white");
-        for(var i = 0; i < 8 ; i++){
+        showText(Math.floor(blockHeight) + " tons Garbage", mario.pos.x+200, 680, 30, "white");
+        /*for(var i = 0; i < 8 ; i++){
           showText(i*2+"kg", mario.pos.x-300, 700-i*35, 18, "white");
-        }
+        }*/
       }
   }
   function startScreen(){
     if(startVar === false){
       fill("black");
       rect(0-340,0,800,800);
-      showText("Use arrows to select your difficulty", -120, 250, 24, "white");
-      showText("Press Enter to Continue", 0, 600, 24, "white");
+      showText("The Title", -110, 110, 100, "white");
+
+      showText("Use arrows to select your difficulty", -140, 250, 30, "white");
+      showText("What if the whole world would act like ...", -120, 275, 20, "white");
+
+      showText("Press Enter to Continue", 0, 600, 40, "white");
         if(highlight === 0){
-          showText("China - produces 6ton/min", -70, 290, 24, "yellow");
-        } else { showText("China", -70, 290, 24, "white"); }
+          showText("...USA - produces 6ton/min", -70, 310, 20, "yellow");
+        } else { showText("...USA", -70, 310, 20, "white"); }
 
         if(highlight === 1){
-          showText("Italy - produces 6ton/min", -70, 320, 24, "yellow");
-        } else { showText("Italy", -70, 320, 24, "white"); }
+          showText("...Italy - produces 6ton/min", -70, 340, 20, "yellow");
+        } else { showText("...Italy", -70, 340, 20, "white"); }
 
         if(highlight === 2){
-          showText("Germany - produces 6ton/min", -70, 350, 24, "yellow");
-        } else { showText("Germany", -70, 350, 24, "white"); }
+          showText("...Canada - produces 6ton/min", -70, 370, 20, "yellow");
+        } else { showText("...Canada", -70, 370, 20, "white"); }
       gameover = true;
     }
   }
   function instruction(){
+
     var h = 100;
     var color = "yellow";
     fill(20,20,20);
@@ -371,15 +382,31 @@ function convertToArray(boxSize,height,width){
     showText("in case you are wondering...", -270, h+505, 24, color);
     showText("this is the garbage", -270, h+530, 24, color);
 
-
-    if(mario.pos.x> 500 && mario.pos.x < 800){
-      showText("did you forget something?", mario.pos.x-270, 330, 24, color);
+    if(mario.pos.x> 500 && bubblesStates.first === true){
+        image(speech, mario.pos.x-355 , 250 , 594/2, 180/2);
+        showText("did you forget something?", mario.pos.x-325, 285, 24, "black");
+        setTimeout(function(){
+            bubblesStates.first = false;
+            bubblesStates.second = true;
+        },2000)
     }
-    if(mario.pos.x> 800 && mario.pos.x < 1200){
-      showText("without picking trash up you will never make it", mario.pos.x-270, 330, 24, color);
+    if(bubblesStates.second === true){
+        image(speech2, mario.pos.x-355 , 170 , 991/2, 153/2);
+        showText("only by picking up your trash you will stay alive", mario.pos.x-340, 200, 24, "black");
+        setTimeout(function(){
+            bubblesStates.second = false;
+        },3000)
     }
 
   }
+//======================================================================================================
+//======================================================================================================
+//======================================================================================================
+//======================================================================================================
+//======================================================================================================
+//======================================================================================================
+//======================================================================================================
+//======================================================================================================
 //======================================================================================================
 // ============= CONTRUCTORS ===========================================================================
 // Establish constructor for mario
