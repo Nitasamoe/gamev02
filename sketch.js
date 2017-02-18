@@ -1,3 +1,4 @@
+var skinNum = 0;
 var speedRise = 15;
 var gameInput = {
   time : 1000,
@@ -5,7 +6,7 @@ var gameInput = {
   worldHeight : 700,
   worldWidth : 10500,
   garbageRaiseSpeed : 2,
-  garbageLowerValue : 50,
+  garbageLowerValue : 10,
   garbageDropTime : 1,
   garbageRaiseSpeedChina : speedRise*1.8,
   garbageRaiseSpeedItaly : speedRise*1.2,
@@ -52,8 +53,12 @@ function preload() {
       imgBlock = loadImage("block.png");
       imgBlock2 = loadImage("block2.png");
       ghostFront = loadImage("ghostFront.png");
-      ghostLeft = loadImage("ghostLeft.png");
-      ghostRight = loadImage("ghostRight.png");
+      ghostLeftUSA = loadImage("ghostLeftUSA.png");
+      ghostLeftCan = loadImage("ghostLeftCan.png");
+      ghostLeftItal = loadImage("ghostLeftItal.png");
+      ghostRightUSA = loadImage("ghostRightUSA.png");
+      ghostRightCan = loadImage("ghostRightCan.png");
+      ghostRightItal = loadImage("ghostRightItal.png");
       mullberg = loadImage("Mullberg.png");
       img = loadImage("bild.jpg");
       sky = loadImage("sky.jpg");
@@ -274,13 +279,13 @@ function renderGarbage(){
 }
 function marioDisplay(){
   if(mario.acc.x === 0){
-    image(ghostFront,mario.pos.x-mario.size/2,mario.pos.y-mario.size/2,mario.size,mario.size);
+    image(chooseSkin(skinNum).right,mario.pos.x-mario.size/2,mario.pos.y-mario.size/2,mario.size,mario.size);
   } else
   if(mario.looks === true){
-    image(ghostLeft,mario.pos.x-mario.size/2,mario.pos.y-mario.size/2,mario.size,mario.size);
+    image(chooseSkin(skinNum).left,mario.pos.x-mario.size/2,mario.pos.y-mario.size/2,mario.size,mario.size);
   } else
   if(mario.looks === false){
-    image(ghostRight,mario.pos.x-mario.size/2,mario.pos.y-mario.size/2,mario.size,mario.size);
+    image(chooseSkin(skinNum).right,mario.pos.x-mario.size/2,mario.pos.y-mario.size/2,mario.size,mario.size);
   }
 }
 function convertToArray(boxSize,height,width){
@@ -340,14 +345,17 @@ function convertToArray(boxSize,height,width){
 
       showText("Press Enter to Continue", 0, 600, 40, "white");
         if(highlight === 0){
+          skinNum = 0;
           showText("...USA - one American produces 2kg/day", -70, 310, 20, "yellow");
         } else { showText("...USA", -70, 310, 20, "white"); }
 
         if(highlight === 1){
+          skinNum = 1;
           showText("...Italy - one Italian produces 1,3kg/day", -70, 340, 20, "yellow");
         } else { showText("...Italy", -70, 340, 20, "white"); }
 
         if(highlight === 2){
+          skinNum = 2;
           showText("...Canada - one Canadian produces 1,1kg/day", -70, 370, 20, "yellow");
         } else { showText("...Canada", -70, 370, 20, "white"); }
       gameover = true;
@@ -400,6 +408,15 @@ function convertToArray(boxSize,height,width){
         if(worldClockData.min === 60){worldClockData.min = 0;worldClockData.hou += 1;}
         if(worldClockData.hou === 60){worldClockData.hou = 0;worldClockData.day += 1;}
       },timeSpeed);
+    }
+    function chooseSkin(number){
+      var skin = {}
+      switch(number){
+        case 0: {skin.right = ghostRightUSA;skin.left = ghostLeftUSA;skin.name = "USA";}break;
+        case 1: {skin.right = ghostRightItal;skin.left = ghostLeftItal;skin.name = "Ita";}break;
+        case 2: {skin.right = ghostRightCan;skin.left = ghostLeftCan;skin.name = "Can";}break;
+      }
+      return skin;
     }
 //======================================================================================================
 //======================================================================================================
