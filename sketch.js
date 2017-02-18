@@ -1,14 +1,15 @@
+var speedRise = 15;
 var gameInput = {
   time : 1000,
   jumpHigh : 32,
   worldHeight : 700,
   worldWidth : 10500,
   garbageRaiseSpeed : 2,
-  garbageLowerValue : 5,
+  garbageLowerValue : 50,
   garbageDropTime : 1,
-  garbageRaiseSpeedChina : 100,
-  garbageRaiseSpeedItaly : 5,
-  garbageRaiseSpeedGermany : 9
+  garbageRaiseSpeedChina : speedRise*1.8,
+  garbageRaiseSpeedItaly : speedRise*1.2,
+  garbageRaiseSpeedGermany : speedRise
 }
 //====================================================================
 //====================================================================
@@ -17,16 +18,13 @@ var gameInput = {
 //======================Here On On====================================
 //====================================================================
 //====================================================================
-//====================================================================
-//====================================================================
-//====================================================================
 var bubblesStates = {
   first : true,
   second : false
 }
-var highlight = 0;
-var worldSetup = [],
-  sizeBox     = 35,
+var highlight = 0; // is used to determine which country in Menu is currently highlighted
+var worldSetup = [], // is used to store the Data which builds the world
+  sizeBox     = 35, // size of the boxes. changing too much can result in big trouble
     marioInput  = {
       speedValue  : 1,
       jumpValue   : gameInput.jumpHigh,
@@ -50,9 +48,6 @@ var worldSetup = [],
       x:0,
       y:0
     }
-var clock = {
-
-}
 function preload() {
       imgBlock = loadImage("block.png");
       imgBlock2 = loadImage("block2.png");
@@ -86,33 +81,26 @@ function setup() {//=========Start SETUP========================================
   frameRate(60);
 // Setup Game Clock
   worldClock();
-
   function worldClock(){
     var clock2 = 0;
-
     var clock3 = 0;
     setInterval(function(){
-      // console.log(worldClockData)
-      // console.log(worldClockData.hou)
-      // console.log(worldClockData.min)
-      // console.log(worldClockData.sec)
-      worldClockData.sec += 1;
-      clock2 += 0.5;
-       if(clock2 === gameInput.garbageDropTime-0.5){lastPos.x = mario.pos.x;lastPos.y = mario.pos.y;}
-      clock3 += 0.5;
-       if(clock3 === gameInput.garbageDropTime){garbArray.push(new Garbage(lastPos.x,lastPos.y)); clock3 = 0; clock2 = 0;}
-      blockHeight += gameInput.garbageRaiseSpeed;
-      if(worldClockData.sec === 60){worldClockData.sec = 0;worldClockData.min += 1;}
-      if(worldClockData.min === 60){worldClockData.min = 0;worldClockData.hou += 1;}
-      if(worldClockData.hou === 60){worldClockData.hou = 0;worldClockData.day += 1;}
+      if(startVar === true){
+        worldClockData.sec += 1;
+        clock2 += 0.5;
+         if(clock2 === gameInput.garbageDropTime-0.5){lastPos.x = mario.pos.x;lastPos.y = mario.pos.y;}
+        clock3 += 0.5;
+         if(clock3 === gameInput.garbageDropTime){garbArray.push(new Garbage(lastPos.x,lastPos.y)); clock3 = 0; clock2 = 0;}
+        blockHeight += gameInput.garbageRaiseSpeed;
+        if(worldClockData.sec === 60){worldClockData.sec = 0;worldClockData.min += 1;}
+        if(worldClockData.min === 60){worldClockData.min = 0;worldClockData.hou += 1;}
+        if(worldClockData.hou === 60){worldClockData.hou = 0;worldClockData.day += 1;}
+      }
     },timeSpeed);
   }
-// Setting up array for boxes
-  boxArr = [];
-// creating the boxes and filling them into the BoxArr
-fillArrayWithBoxes();
-// create Mario from the constructor
-  mario = new Mario()
+  boxArr = [];// Setting up array for boxes
+  fillArrayWithBoxes(); // creating the boxes and filling them into the BoxArr
+  mario = new Mario()// create Mario from the constructor
 }//=========END SETUP==========================================================
 //=============================================================================
 
@@ -121,17 +109,15 @@ fillArrayWithBoxes();
 //=============================================================================
 function draw(){//=========Start DRAW==========================================
 // Setup FORCES----------------------------------------------------------
-  gravity = createVector(0,1);
+  gravity = createVector(0,1); // creates the Gravitationa Force
 //WORLD BUILDING---------------------------------------------------------
-   worldBuilding();
-   blockRender();
-
-   instruction();
-
-   renderGarbage();
+   worldBuilding(); // builds the worldBuilding
+   blockRender(); // renders the block with the input block
+   instruction(); // renders the instructions at the beginning
+   renderGarbage(); // renders the Garbage pieces that we drop
 //MARIO BUILDING-----------------------------------------------
   mario.vel.mult(0); // throw velocity bck to zero
-  //Move Mario------------------------------------------------------
+//Move Mario------------------------------------------------------
   mario.acc.add(gravity); // add gravity to mario
   mario.vel.add(mario.acc); // add acceleration to velocity
   mario.acc.limit(10); // limit the velocity to 10
@@ -254,7 +240,6 @@ function worldBuilding(){
   image(back3,0-mario.pos.x*1.07,0, worldWidth+500, worldHeight);
   image(back2,0-mario.pos.x*1.05,0, worldWidth+500, worldHeight);
   image(back1,0-mario.pos.x,0, worldWidth, worldHeight);
-
 // translate the world view
   translate(-mario.pos.x+ width/2,0);
 // Setup black squares ------------------------------------------
@@ -338,7 +323,7 @@ function convertToArray(boxSize,height,width){
   function turnOnHUD(){
     if(mario.pos.x > 300){
         showText(worldClockData.hou+":"+worldClockData.min+":"+worldClockData.sec, mario.pos.x-300, 50, 24, "white");
-        showText(Math.floor(blockHeight) + " tons Garbage", mario.pos.x+200, 680, 30, "white");
+        showText(Math.floor(blockHeight/speedRise*98) + " tons Garbage", mario.pos.x+200, 680, 30, "white");
         /*for(var i = 0; i < 8 ; i++){
           showText(i*2+"kg", mario.pos.x-300, 700-i*35, 18, "white");
         }*/
@@ -355,21 +340,20 @@ function convertToArray(boxSize,height,width){
 
       showText("Press Enter to Continue", 0, 600, 40, "white");
         if(highlight === 0){
-          showText("...USA - produces 6ton/min", -70, 310, 20, "yellow");
+          showText("...USA - one American produces 2kg/day", -70, 310, 20, "yellow");
         } else { showText("...USA", -70, 310, 20, "white"); }
 
         if(highlight === 1){
-          showText("...Italy - produces 6ton/min", -70, 340, 20, "yellow");
+          showText("...Italy - one Italian produces 1,3kg/day", -70, 340, 20, "yellow");
         } else { showText("...Italy", -70, 340, 20, "white"); }
 
         if(highlight === 2){
-          showText("...Canada - produces 6ton/min", -70, 370, 20, "yellow");
+          showText("...Canada - one Canadian produces 1,1kg/day", -70, 370, 20, "yellow");
         } else { showText("...Canada", -70, 370, 20, "white"); }
       gameover = true;
     }
   }
   function instruction(){
-
     var h = 100;
     var color = "yellow";
     fill(20,20,20);
@@ -397,8 +381,26 @@ function convertToArray(boxSize,height,width){
             bubblesStates.second = false;
         },3000)
     }
-
-  }
+  }// End of Instructions Function
+  function worldClock(){
+      var clock2 = 0;
+      var clock3 = 0;
+      setInterval(function(){
+        // console.log(worldClockData)
+        // console.log(worldClockData.hou)
+        // console.log(worldClockData.min)
+        // console.log(worldClockData.sec)
+        worldClockData.sec += 1;
+        clock2 += 0.5;
+         if(clock2 === gameInput.garbageDropTime-0.5){lastPos.x = mario.pos.x;lastPos.y = mario.pos.y;}
+        clock3 += 0.5;
+         if(clock3 === gameInput.garbageDropTime){garbArray.push(new Garbage(lastPos.x,lastPos.y)); clock3 = 0; clock2 = 0;}
+        blockHeight += gameInput.garbageRaiseSpeed;
+        if(worldClockData.sec === 60){worldClockData.sec = 0;worldClockData.min += 1;}
+        if(worldClockData.min === 60){worldClockData.min = 0;worldClockData.hou += 1;}
+        if(worldClockData.hou === 60){worldClockData.hou = 0;worldClockData.day += 1;}
+      },timeSpeed);
+    }
 //======================================================================================================
 //======================================================================================================
 //======================================================================================================
