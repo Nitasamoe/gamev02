@@ -338,7 +338,7 @@ function convertToArray(boxSize,height,width){
     if(startVar === false){
       fill("black");
       rect(0-340,0,800,800);
-      showText("The Title", -110, 110, 100, "white");
+      showText("Aroon", -110, 110, 100, "white");
 
       showText("Use arrows to select your difficulty", -140, 250, 30, "white");
       showText("What if the whole world would act like ...", -120, 275, 20, "white");
