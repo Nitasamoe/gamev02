@@ -11,6 +11,22 @@ The goal of the game is that the user, through the experience of the game, __und
 
 We implement the possibility for the user of choosing the country in order to give him/her a reference and make comparison.
 
+## Why A Game?
+
+Is easier to get attention from the user and keeps him engaged. As a result the learned behaviors from inside of the game will be translated to everyday life.
+Moreover it is based on a gametype that everybody knows. A simple Sidescroller Jump´n Run. So it is very intuitive to play and the mechanisms are easily understood. That is also the reason why the game graphics are kept in a retro style. 
+
+## What is it about?
+	
+The player as a ghost, an abstract being, runs through a dystopian world and tries to reach the end. Under him there is a rising block of garbage that threatens his existence.  Depending on the country he is in the rising speed is different. The more he gets to the city he harder it gets for him to get ahed. Ever few meters he also drops garbage. Only by picking the garbage up, he can lower the rising garbage and continue his journey. 
+
+## End of Game
+
+It is not possible to finish the game in the intended way. The player just simply cannot win the game. He cannot reach the end. The game is configured to always let the player loose until he realizes that he cannot change the world alone. He needs help.
+It should show the action of people in a short term and the amount of waste produced.
+
+
+
 # Challenges 
 
 The main challenge was the translation of the __awareness__ on the topic into coding.
@@ -27,24 +43,11 @@ We decide to use the __bottle as a common object__ that we daily deal with, as i
 To build the world instead of create each single box we create a _function_ that beside some background layer read a _bitmap file_ and fill with a box the black square. This feature gave us the possibility to easily change the shape of a level without touching directly the code.
 
 ```javascript
-function worldBuilding(){
-// build background image
-  image(back4,0-mario.pos.x,0, worldWidth+500, worldHeight);
-  image(back3,0-mario.pos.x*1.07,0, worldWidth+500, worldHeight);
-  image(back2,0-mario.pos.x*1.05,0, worldWidth+500, worldHeight);
-  image(back1,0-mario.pos.x,0, worldWidth, worldHeight);
-
-// translate the world view
-  translate(-mario.pos.x+ width/2,0);
-// Setup black squares ------------------------------------------
-  for(var x = 0; x < worldSetup[0].length ; x++){
-    for(var y = 0; y < worldSetup.length ; y++){
-      if(worldSetup[y][x]===false){
-        // Start Punkt links Oben
-        (function(){
-            image(imgBlock2,x*sizeBox,y*sizeBox,sizeBox,sizeBox);
-        })()
-      }
+function convertToArray(boxSize,height,width){
+  for(var j = 0 ; j < height/boxSize ; j++){
+    worldSetup.push([])
+    for(var i = 0 ; i < width/boxSize ; i++ ){
+      worldSetup[j].push(1020===get(i*boxSize+boxSize/2,j*boxSize+boxSize/2).reduce(function(start, el){return start+el},0));
     }
   }
 }
@@ -111,6 +114,7 @@ Graphic adjustment
 * Tobias Schnider [@Nitasamoe](https://github.com/Nitasamoe) 
 * [Lydia Renner](www.lydia-renner.com) [@LydiaFritzi](https://github.com/LydiaFritzi)
 * Andrea Taverna [@AnderTave](https://github.com/AnderTave)
+
 
 
 
