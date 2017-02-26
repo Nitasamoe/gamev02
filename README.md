@@ -1,6 +1,6 @@
 # About
 
-Wasteland(name to define) is a university project develop during the Creative Coding course at [Politecnico di Milano.](http://www.polimi.it)
+Wasteland is a university project develop during the Creative Coding course at [Politecnico di Milano.](http://www.polimi.it)
 The aim is to create a [p5-based](http://p5js.org) app around the theme of “out of scale”.
 
 # Project idea
@@ -103,9 +103,7 @@ We add countries simply by give to certain _variables_ a different series of val
         }
       }
 ```
-
-Graphic adjustment
-
+![countries](/readme/countries.png)
 
 # Authors
 
@@ -118,3 +116,5 @@ Graphic adjustment
 
 > Leave this world a little better than you found it.
 > - Baden-Powell's Last Message (1941)
+
+![gameover](/readme/gameover.png)
