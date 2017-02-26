@@ -51,23 +51,23 @@ var worldSetup = [], // is used to store the Data which builds the world
       y:0
     }
 function preload() {
-      imgBlock2 = loadImage("block2.png");
-      ghostLeftUSA = loadImage("ghostLeftUSA.png");
-      ghostLeftCan = loadImage("ghostLeftCan.png");
-      ghostLeftItal = loadImage("ghostLeftItal.png");
-      ghostRightUSA = loadImage("ghostRightUSA.png");
-      ghostRightCan = loadImage("ghostRightCan.png");
-      ghostRightItal = loadImage("ghostRightItal.png");
-      mullberg = loadImage("Mullberg.png");
-      img = loadImage("bild.jpg");
-      back1 = loadImage("back1.png");
-      back2 = loadImage("back2.png");
-      back3 = loadImage("back3.png");
-      back4 = loadImage("back4.png");
-      garbage2 = loadImage("Mullberg.png");
-      wasteIcon = loadImage("bottle.png");
-      speech = loadImage("speech.png");
-      speech2 = loadImage("speech2.png");
+      imgBlock2 = loadImage("assets/block2.png");
+      ghostLeftUSA = loadImage("assets/ghostLeftUSA.png");
+      ghostLeftCan = loadImage("assets/ghostLeftCan.png");
+      ghostLeftItal = loadImage("assets/ghostLeftItal.png");
+      ghostRightUSA = loadImage("assets/ghostRightUSA.png");
+      ghostRightCan = loadImage("assets/ghostRightCan.png");
+      ghostRightItal = loadImage("assets/ghostRightItal.png");
+      mullberg = loadImage("assets/Mullberg.png");
+      img = loadImage("assets/bild.jpg");
+      back1 = loadImage("assets/back1.png");
+      back2 = loadImage("assets/back2.png");
+      back3 = loadImage("assets/back3.png");
+      back4 = loadImage("assets/back4.png");
+      garbage2 = loadImage("assets/Mullberg.png");
+      wasteIcon = loadImage("assets/bottle.png");
+      speech = loadImage("assets/speech.png");
+      speech2 = loadImage("assets/speech2.png");
     }
 //============================END OF INPUT=======================================
 //===============================================================================
