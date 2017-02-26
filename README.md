@@ -25,8 +25,6 @@ The player as a ghost, an abstract being, runs through a dystopian world and tri
 It is not possible to finish the game in the intended way. The player just simply cannot win the game. He cannot reach the end. The game is configured to always let the player loose until he realizes that he cannot change the world alone. He needs help.
 It should show the action of people in a short term and the amount of waste produced.
 
-
-
 # Challenges 
 
 The main challenge was the translation of the __awareness__ on the topic into coding.
@@ -36,7 +34,7 @@ We combine this using negative emotion, such as frustration, as a trigger for co
 
 A second challenge was how to __recreate “feeling” of the experience “picking the trash”__ in the game. We described that experience as something you know that you should (and must) do but it doesn’t give you a direct pleasure.
 We then convert this into the action of leaving behind the player a plastic bottle in order to create a fake constraint in the level that bring the user to always go back, but whishing to go forward. 
-We decide to use the __bottle as a common object__ that we daily deal with, as it is possible, unfortunately, to see in Politcnico rooms after class. 
+We decide to use the __bottle as a common object__ that we daily deal with, as it is possible, unfortunately, to see in Politecnico rooms after class. 
 
 # Difficulties 
 
