@@ -1,12 +1,11 @@
-var skinNum = 0;
-var speedRise = 15;
+var speedRise = 12;
 var gameInput = {
   time : 1000,
-  jumpHigh : 32,
+  jumpHigh : 34,
   worldHeight : 700,
   worldWidth : 10500,
   garbageRaiseSpeed : 2,
-  garbageLowerValue : 10,
+  garbageLowerValue : 18,
   garbageDropTime : 1,
   garbageRaiseSpeedChina : speedRise*1.8,
   garbageRaiseSpeedItaly : speedRise*1.2,
@@ -19,9 +18,11 @@ var gameInput = {
 //======================Here On On====================================
 //====================================================================
 //====================================================================
+var skinNum = 0; // used to store a variable that tells us which skin to use
 var bubblesStates = {
   first : true,
-  second : false
+  second : false,
+  third: false
 }
 var highlight = 0; // is used to determine which country in Menu is currently highlighted
 var worldSetup = [], // is used to store the Data which builds the world
@@ -50,9 +51,7 @@ var worldSetup = [], // is used to store the Data which builds the world
       y:0
     }
 function preload() {
-      imgBlock = loadImage("block.png");
       imgBlock2 = loadImage("block2.png");
-      ghostFront = loadImage("ghostFront.png");
       ghostLeftUSA = loadImage("ghostLeftUSA.png");
       ghostLeftCan = loadImage("ghostLeftCan.png");
       ghostLeftItal = loadImage("ghostLeftItal.png");
@@ -61,15 +60,11 @@ function preload() {
       ghostRightItal = loadImage("ghostRightItal.png");
       mullberg = loadImage("Mullberg.png");
       img = loadImage("bild.jpg");
-      sky = loadImage("sky.jpg");
       back1 = loadImage("back1.png");
       back2 = loadImage("back2.png");
       back3 = loadImage("back3.png");
       back4 = loadImage("back4.png");
-      garbage = loadImage("water.jpg");
       garbage2 = loadImage("Mullberg.png");
-      start = loadImage("start.jpg");
-      circle = loadImage("circle.png");
       wasteIcon = loadImage("bottle.png");
       speech = loadImage("speech.png");
       speech2 = loadImage("speech2.png");
@@ -129,10 +124,10 @@ function draw(){//=========Start DRAW==========================================
   mario.pos.add(mario.vel); // add the velocity to the position
 // Question Collision-------------------------------------------------
   mario.collisionPointsSetup(); // establish the hit box through four points of mario
-  mario.collide(); // check if there is a collision and correct the posiiton
+  mario.collide(); // check if there is a collision and correct the position
 // RENDER MARIO-----------------------------------------------------
-  mario.display();
-  blockRender();
+  mario.display(); // displays Marios
+  blockRender();// displas the rising garbage box
 //change acceleration based on the pressed key. goes left or right.
   movement();
 // Turn on the HUD to see Data of Game
@@ -143,7 +138,7 @@ function draw(){//=========Start DRAW==========================================
 } // Ende draw();==============================================================
 //=============================================================================
 function blockRender(){
-  // RENDER BLOCK THAT RISES=====================================================
+  // RENDER BLOCK THAT RISES===================================================
   fill(180,20,20,100);
   image(garbage2,mario.pos.x-350,worldHeight-blockHeight,700,700);
 }
@@ -156,6 +151,7 @@ function createCollisionPoints(pos,size){
     arr.push({pos:createVector(pos.x,pos.y+size/2),name:"bottom"})
     return arr;
 }
+
 function collision(boxArr,posArr){
   var boxes = boxArr;
   var hitPoints = posArr;
@@ -172,6 +168,7 @@ function collision(boxArr,posArr){
   } // End of For Loop through boxes
   establishAntiForce(where);
 }
+
 function establishAntiForce(boxes){
   var boxes = boxes;
   for(var i=0; i<boxes.length;i++){
@@ -239,6 +236,7 @@ function keyPressed(){
         }
       }
 }
+
 function worldBuilding(){
 // build background image
   image(back4,0-mario.pos.x,0, worldWidth+500, worldHeight);
@@ -259,6 +257,7 @@ function worldBuilding(){
     }
   }
 }
+
 function amIdead(){
   if(mario.pos.y > worldHeight-blockHeight){
     fill("black");
@@ -271,12 +270,14 @@ function amIdead(){
     gameover = true;
   }
 }
+
 function renderGarbage(){
   for(var i = 0 ; i<garbArray.length ; i++){
       garbArray[i].display();
       if(p5.Vector.dist(mario.pos, garbArray[i].pos)<10){garbArray.splice(i,1);blockHeight-=gameInput.garbageLowerValue}
   }
 }
+
 function marioDisplay(){
   if(mario.acc.x === 0){
     image(chooseSkin(skinNum).right,mario.pos.x-mario.size/2,mario.pos.y-mario.size/2,mario.size,mario.size);
@@ -288,6 +289,7 @@ function marioDisplay(){
     image(chooseSkin(skinNum).right,mario.pos.x-mario.size/2,mario.pos.y-mario.size/2,mario.size,mario.size);
   }
 }
+
 function convertToArray(boxSize,height,width){
   for(var j = 0 ; j < height/boxSize ; j++){
     worldSetup.push([])
@@ -296,128 +298,127 @@ function convertToArray(boxSize,height,width){
     }
   }
 }
-  function showText(cont, x, y , size, color){
-    textSize(size);
-    fill(color);
-    textFont("VT323");
-    text(cont, x, y);
-  }
-  function fillArrayWithBoxes(){
-    for(var x = 0; x < worldSetup[0].length ; x++){
-      for(var y = 0; y < worldSetup.length ; y++){
-        if(worldSetup[y][x]===false){
-          (function(){ var box = new Box(x,y); boxArr.push(box);  })();
-        }
+
+function showText(cont, x, y , size, color){
+  textSize(size);
+  fill(color);
+  textFont("VT323");
+  text(cont, x, y);
+}
+
+function fillArrayWithBoxes(){
+  for(var x = 0; x < worldSetup[0].length ; x++){
+    for(var y = 0; y < worldSetup.length ; y++){
+      if(worldSetup[y][x]===false){
+        (function(){ var box = new Box(x,y); boxArr.push(box);  })();
       }
     }
   }
-  function movement(){
-    if(keyIsPressed===true && gameover === false){
-      if(keyCode === RIGHT_ARROW){
-        //console.log("right");
-        mario.acc.add(createVector(marioInput.speedValue,0));
-        mario.looks = false;
-      }
-      if(keyCode === LEFT_ARROW){
-        //console.log("left");
-        mario.acc.add(createVector(-marioInput.speedValue,0));
-        mario.looks = true;
-      }
+}
+
+function movement(){
+  if(keyIsPressed===true && gameover === false){
+    if(keyCode === RIGHT_ARROW){
+      //console.log("right");
+      mario.acc.add(createVector(marioInput.speedValue,0));
+      mario.looks = false;
+    }
+    if(keyCode === LEFT_ARROW){
+      //console.log("left");
+      mario.acc.add(createVector(-marioInput.speedValue,0));
+      mario.looks = true;
     }
   }
-  function turnOnHUD(){
-    if(mario.pos.x > 300){
-        showText(worldClockData.hou+":"+worldClockData.min+":"+worldClockData.sec, mario.pos.x-300, 50, 24, "white");
-        showText(Math.floor(blockHeight/speedRise*98) + " tons Garbage", mario.pos.x+200, 680, 30, "white");
-        /*for(var i = 0; i < 8 ; i++){
-          showText(i*2+"kg", mario.pos.x-300, 700-i*35, 18, "white");
-        }*/
-      }
+}
+
+function turnOnHUD(){
+  if(mario.pos.x > 300){
+      showText(worldClockData.hou+":"+worldClockData.min+":"+worldClockData.sec, mario.pos.x-300, 50, 24, "white");
+      showText(Math.floor(blockHeight/speedRise*98) + " tons Garbage", mario.pos.x+200, 680, 30, "white");
+      /*for(var i = 0; i < 8 ; i++){
+        showText(i*2+"kg", mario.pos.x-300, 700-i*35, 18, "white");
+      }*/
+    }
+}
+
+function startScreen(){
+  if(startVar === false){
+    fill("black");
+    rect(0-340,0,800,800);
+    showText("Aroon", -110, 110, 100, "white");
+
+    showText("Use arrows to select your difficulty", -140, 250, 30, "white");
+    showText("What if the whole world would act like ...", -120, 275, 20, "white");
+
+    showText("Press Enter to Continue", 0, 600, 40, "white");
+      if(highlight === 0){
+        skinNum = 0;
+        showText("...USA - one American produces 2kg/day", -70, 310, 20, "yellow");
+      } else { showText("...USA", -70, 310, 20, "white"); }
+
+      if(highlight === 1){
+        skinNum = 1;
+        showText("...Italy - one Italian produces 1,3kg/day", -70, 340, 20, "yellow");
+      } else { showText("...Italy", -70, 340, 20, "white"); }
+
+      if(highlight === 2){
+        skinNum = 2;
+        showText("...Canada - one Canadian produces 1,1kg/day", -70, 370, 20, "yellow");
+      } else { showText("...Canada", -70, 370, 20, "white"); }
+    gameover = true;
   }
-  function startScreen(){
-    if(startVar === false){
-      fill("black");
-      rect(0-340,0,800,800);
-      showText("Aroon", -110, 110, 100, "white");
+}
 
-      showText("Use arrows to select your difficulty", -140, 250, 30, "white");
-      showText("What if the whole world would act like ...", -120, 275, 20, "white");
+function instruction(){
+  var h = 100;
+  var color = "yellow";
+  fill(20,20,20);
+  rect(0-350,0,350,700);
+  showText("use the arrows to move", -270, h+25, 24, color);
+  showText("and collect the bottles", -270, h+50, 24, color);
+  showText("in order to prevent", -270, h+75, 24, color);
+  showText("the garbage to kill you", -270, h+100, 24, color);
+  showText("Ah...", -270, h+480, 24, color);
+  showText("in case you are wondering...", -270, h+505, 24, color);
+  showText("this is the garbage", -270, h+530, 24, color);
 
-      showText("Press Enter to Continue", 0, 600, 40, "white");
-        if(highlight === 0){
-          skinNum = 0;
-          showText("...USA - one American produces 2kg/day", -70, 310, 20, "yellow");
-        } else { showText("...USA", -70, 310, 20, "white"); }
-
-        if(highlight === 1){
-          skinNum = 1;
-          showText("...Italy - one Italian produces 1,3kg/day", -70, 340, 20, "yellow");
-        } else { showText("...Italy", -70, 340, 20, "white"); }
-
-        if(highlight === 2){
-          skinNum = 2;
-          showText("...Canada - one Canadian produces 1,1kg/day", -70, 370, 20, "yellow");
-        } else { showText("...Canada", -70, 370, 20, "white"); }
-      gameover = true;
-    }
+  if(mario.pos.x> 500 && bubblesStates.first === true){
+      image(speech, mario.pos.x-355 , 250 , 594/2, 180/2);
+      showText("did you forget something?", mario.pos.x-325, 285, 24, "black");
+      setTimeout(function(){
+          bubblesStates.first = false;
+          bubblesStates.second = true;
+      },2000)
   }
-  function instruction(){
-    var h = 100;
-    var color = "yellow";
-    fill(20,20,20);
-    rect(0-350,0,350,700);
-    showText("use the arrows to move", -270, h+25, 24, color);
-    showText("and collect the bottles", -270, h+50, 24, color);
-    showText("in order to prevent", -270, h+75, 24, color);
-    showText("the garbage to kill you", -270, h+100, 24, color);
-    showText("Ah...", -270, h+480, 24, color);
-    showText("in case you are wondering...", -270, h+505, 24, color);
-    showText("this is the garbage", -270, h+530, 24, color);
+  if(bubblesStates.second === true){
+      image(speech2, mario.pos.x-355 , 170 , 991/2, 153/2);
+      showText("only by picking up your trash you will stay alive", mario.pos.x-340, 200, 24, "black");
+      setTimeout(function(){
+          bubblesStates.second = false;
+          setTimeout(function(){
+              bubblesStates.third = true;
+          },1000)
+      },3000)
 
-    if(mario.pos.x> 500 && bubblesStates.first === true){
-        image(speech, mario.pos.x-355 , 250 , 594/2, 180/2);
-        showText("did you forget something?", mario.pos.x-325, 285, 24, "black");
-        setTimeout(function(){
-            bubblesStates.first = false;
-            bubblesStates.second = true;
-        },2000)
+  }
+  if(bubblesStates.third === true){
+      image(speech, mario.pos.x-375 , 170 , 991/2, 153/2);
+      showText("hurry up, time is running out!", mario.pos.x-340, 200, 24, "black");
+      setTimeout(function(){
+          bubblesStates.third = false;
+      },2000)
+  }
+}// End of Instructions Function
+
+function chooseSkin(number){
+    var skin = {}
+    switch(number){
+      case 0: {skin.right = ghostRightUSA;skin.left = ghostLeftUSA;skin.name = "USA";}break;
+      case 1: {skin.right = ghostRightItal;skin.left = ghostLeftItal;skin.name = "Ita";}break;
+      case 2: {skin.right = ghostRightCan;skin.left = ghostLeftCan;skin.name = "Can";}break;
     }
-    if(bubblesStates.second === true){
-        image(speech2, mario.pos.x-355 , 170 , 991/2, 153/2);
-        showText("only by picking up your trash you will stay alive", mario.pos.x-340, 200, 24, "black");
-        setTimeout(function(){
-            bubblesStates.second = false;
-        },3000)
-    }
-  }// End of Instructions Function
-  function worldClock(){
-      var clock2 = 0;
-      var clock3 = 0;
-      setInterval(function(){
-        // console.log(worldClockData)
-        // console.log(worldClockData.hou)
-        // console.log(worldClockData.min)
-        // console.log(worldClockData.sec)
-        worldClockData.sec += 1;
-        clock2 += 0.5;
-         if(clock2 === gameInput.garbageDropTime-0.5){lastPos.x = mario.pos.x;lastPos.y = mario.pos.y;}
-        clock3 += 0.5;
-         if(clock3 === gameInput.garbageDropTime){garbArray.push(new Garbage(lastPos.x,lastPos.y)); clock3 = 0; clock2 = 0;}
-        blockHeight += gameInput.garbageRaiseSpeed;
-        if(worldClockData.sec === 60){worldClockData.sec = 0;worldClockData.min += 1;}
-        if(worldClockData.min === 60){worldClockData.min = 0;worldClockData.hou += 1;}
-        if(worldClockData.hou === 60){worldClockData.hou = 0;worldClockData.day += 1;}
-      },timeSpeed);
-    }
-    function chooseSkin(number){
-      var skin = {}
-      switch(number){
-        case 0: {skin.right = ghostRightUSA;skin.left = ghostLeftUSA;skin.name = "USA";}break;
-        case 1: {skin.right = ghostRightItal;skin.left = ghostLeftItal;skin.name = "Ita";}break;
-        case 2: {skin.right = ghostRightCan;skin.left = ghostLeftCan;skin.name = "Can";}break;
-      }
-      return skin;
-    }
+    return skin;
+  }
 //======================================================================================================
 //======================================================================================================
 //======================================================================================================
