@@ -1,3 +1,4 @@
+document.querySelector("html").style.background = "black";
 var speedRise = 12;
 var gameInput = {
   time : 1000,
