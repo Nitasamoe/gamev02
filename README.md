@@ -89,7 +89,7 @@ We add countries simply by give to certain _variables_ a different series of val
         if(highlight === 0){
           gameover = false;
           startVar = true;
-          gameInput.garbageRaiseSpeed = gameInput.garbageRaiseSpeedChina;
+          gameInput.garbageRaiseSpeed = gameInput.garbageRaiseSpeedUsa;
         }
         if(highlight === 1){
           gameover = false;
@@ -99,7 +99,7 @@ We add countries simply by give to certain _variables_ a different series of val
         if(highlight === 2){
           gameover = false;
           startVar = true;
-          gameInput.garbageRaiseSpeed = gameInput.garbageRaiseSpeedGermany;
+          gameInput.garbageRaiseSpeed = gameInput.garbageRaiseSpeedCanada;
         }
       }
 ```

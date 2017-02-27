@@ -7,9 +7,9 @@ var gameInput = {
   garbageRaiseSpeed : 2,
   garbageLowerValue : 18,
   garbageDropTime : 1,
-  garbageRaiseSpeedChina : speedRise*1.8,
+  garbageRaiseSpeedUsa : speedRise*1.8,
   garbageRaiseSpeedItaly : speedRise*1.2,
-  garbageRaiseSpeedGermany : speedRise
+  garbageRaiseSpeedCanada : speedRise
 }
 //====================================================================
 //====================================================================
@@ -222,7 +222,7 @@ function keyPressed(){
         if(highlight === 0){
           gameover = false;
           startVar = true;
-          gameInput.garbageRaiseSpeed = gameInput.garbageRaiseSpeedChina;
+          gameInput.garbageRaiseSpeed = gameInput.garbageRaiseSpeedUsa;
         }
         if(highlight === 1){
           gameover = false;
@@ -232,7 +232,7 @@ function keyPressed(){
         if(highlight === 2){
           gameover = false;
           startVar = true;
-          gameInput.garbageRaiseSpeed = gameInput.garbageRaiseSpeedGermany;
+          gameInput.garbageRaiseSpeed = gameInput.garbageRaiseSpeedCanada;
         }
       }
 }
