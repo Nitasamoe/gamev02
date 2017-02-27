@@ -105,6 +105,24 @@ We add countries simply by give to certain _variables_ a different series of val
 ```
 ![countries](/readme/countries.png)
 
+# Data
+
+The source of our data is [Municipal waste, Generation and Treatment - by OECD](https://stats.oecd.org/Index.aspx?DataSetCode=MUNW) that are visible in an article here: [The Countries Generating The Most Municipal Waste](https://www.statista.com/chart/3925/the-countries-generating-the-most-municipal-waste/).
+
+We then make a proportion to relate every action to the prodaction per capita each second.
+
+At the end, as you can see from the selection screen, we decide to translate this into a global attitude: "What if the whole world would act like ..." . In order to do so we decided to show the production per day to make more tangible to the everyday life.
+
+
+Country | Waste production
+------------ | -------------
+USA | 2 kg/day
+Italy | 1,3 kg/day
+Canda | 1,1 kg/day
+
+
+
+
 # Authors
 
 * Tobias Schnider [@Nitasamoe](https://github.com/Nitasamoe) 
