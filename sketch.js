@@ -267,7 +267,7 @@ function amIdead(){
     // fill("yellow");
     showText("Game Over",mario.pos.x-160, 300, 80,"yellow" );
     showText("One cannot change all the world,", mario.pos.x-200, 450, 30,"yellow");
-    showText("all together can change the only one we have.", mario.pos.x-250, 480, 40,"yellow");
+    showText("all together can change the only one we have.", mario.pos.x-250, 480, 30,"yellow");
     gameover = true;
   }
 }
