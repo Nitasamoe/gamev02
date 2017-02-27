@@ -334,7 +334,7 @@ function movement(){
 function turnOnHUD(){
   if(mario.pos.x > 300){
       showText(worldClockData.hou+":"+worldClockData.min+":"+worldClockData.sec, mario.pos.x-300, 50, 32, "white");
-      showText(Math.floor(blockHeight/speedRise*98) + " tons Garbage", mario.pos.x+200, 680, 30, "white");
+      showText(Math.floor(blockHeight/speedRise*98) + " tons Garbage", mario.pos.x+180, 680, 30, "white");
       /*for(var i = 0; i < 8 ; i++){
         showText(i*2+"kg", mario.pos.x-300, 700-i*35, 18, "white");
       }*/
