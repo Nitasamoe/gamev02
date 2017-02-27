@@ -333,7 +333,7 @@ function movement(){
 
 function turnOnHUD(){
   if(mario.pos.x > 300){
-      showText(worldClockData.hou+":"+worldClockData.min+":"+worldClockData.sec, mario.pos.x-300, 50, 24, "white");
+      showText(worldClockData.hou+":"+worldClockData.min+":"+worldClockData.sec, mario.pos.x-300, 50, 32, "white");
       showText(Math.floor(blockHeight/speedRise*98) + " tons Garbage", mario.pos.x+200, 680, 30, "white");
       /*for(var i = 0; i < 8 ; i++){
         showText(i*2+"kg", mario.pos.x-300, 700-i*35, 18, "white");
@@ -403,7 +403,7 @@ function instruction(){
   }
   if(bubblesStates.third === true){
       image(speech, mario.pos.x-375 , 170 , 991/2, 153/2);
-      showText("hurry up, time is running out!", mario.pos.x-340, 200, 24, "black");
+      showText("hurry up, time is running out!", mario.pos.x-340, 120, 24, "black");
       setTimeout(function(){
           bubblesStates.third = false;
       },2000)
